@@ -75,6 +75,7 @@ Route::middleware(['user','auth:api'])->group(function () {
     Route::get('/upgrade-subscription',[SubscriptionController::class,'upgradeSubscription']);
     // Subscription
     Route::post('/user-subscription', [SubscriptionController::class, 'userSubscription']);
+    Route::post('/purchase-subscription', [SubscriptionController::class, 'purchaseNewSubscription']);
     // my story
     Route::get('/my-story', [StoryController::class, 'myStory']);
     // delete story
@@ -82,7 +83,7 @@ Route::middleware(['user','auth:api'])->group(function () {
     // archive story
     Route::get('/archive-story', [StoryController::class, 'archiveStory']);
     // Subscription
-    Route::post('/user-subscription', [SubscriptionController::class, 'userSubscription']);
+//    Route::post('/user-subscription', [SubscriptionController::class, 'userSubscription']);
 
     Route::get('/terms-condition', [RulesRegulationController::class, 'termsCondition']);
     Route::get('/privacy-policy', [RulesRegulationController::class, 'privacyPolicy']);

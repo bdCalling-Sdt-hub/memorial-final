@@ -64,7 +64,7 @@ class AuthController extends Controller
             Mail::to($request->email)->send(new OtpMail($user->otp));
             return response()->json([
                 'message' => 'Please check your email to valid your email',
-            ]);
+            ],200);
         }
     }
 

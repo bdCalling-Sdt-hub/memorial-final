@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Events\SendNotificationEvent;
-use App\Models\subscription;
+use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -105,11 +105,54 @@ class SubscriptionController extends Controller
         }
     }
 
+    public function purchaseNewSubscription(Request $request)
+    {
+        $status = $request->status;
 
-    public function upgradeSubscription(Request $request){
+        // if subscription is successful
+        if ($status == 'successful') {
+            $auth_user = auth()->user()->id;
+            $subscription = new Subscription();
+            $subscription->package_id = $request->package_id;
+            $subscription->user_id = $auth_user;
+            $subscription->tx_ref = $request->tx_ref;
+            $subscription->amount = $request->amount;
+            $subscription->currency = $request->currency;
+            $subscription->payment_type = $request->payment_type;
+            $subscription->status = $status;
+            $subscription->email = auth()->user()->email;
+            $subscription->name = auth()->user()->name;
+            $subscription->save();
+            if ($subscription) {
+                $user = User::find($auth_user);
+                $subscriptions = Subscription::where('user_id', $auth_user)->first();
+                if ($user) {
+                    $user->user_status = 1;
+                    $user->save();
+                }
+                if ($subscriptions) {
+                    $newEndDate = Carbon::parse($subscription->created_at)->addMonth();
+                    $subscription->end_date = $newEndDate;
+                    $subscription->update();
+                    $admin_result = app('App\Http\Controllers\NotificationController')->sendAdminNotification('Purchased a subscription', $subscription->created_at, $subscription);
+                }
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'subscription complete',
+                    'data' => $subscription,
+                ], 200);
+            }
 
+        } elseif ($status == 'cancelled') {
+            return response()->json([
+                'status' => 'cancelled',
+                'message' => 'Your subscription is canceled'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'cancelled',
+                'message' => 'Your transaction has been failed'
+            ]);
+        }
     }
-
-
-
 }

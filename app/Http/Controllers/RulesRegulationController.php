@@ -21,7 +21,7 @@ class RulesRegulationController extends Controller
         } else {
             return response()->json([
                 'status' => 'false',
-                'data' => []
+                'data' => $about
             ], 200);
         }
     }
@@ -37,7 +37,7 @@ class RulesRegulationController extends Controller
         } else {
             return response()->json([
                 'status' => 'false',
-                'data' => []
+                'data' => $terms
             ], 200);
         }
     }
@@ -53,7 +53,7 @@ class RulesRegulationController extends Controller
         } else {
             return response()->json([
                 'status' => 'false',
-                'data' => []
+                'data' => $privacy
             ], 200);
         }
     }

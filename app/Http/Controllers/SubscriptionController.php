@@ -100,7 +100,7 @@ class SubscriptionController extends Controller
         } else {
             return response()->json([
                 'message' => 'success',
-                'data' => []
+                'data' => $my_subscription
             ]);
         }
     }

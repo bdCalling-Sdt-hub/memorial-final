@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Addmin\DashboardController;
 use App\Http\Controllers\Api\Addmin\SubscribController;
 use App\Http\Controllers\Api\Addmin\UserController;
 use App\Http\Controllers\Api\Webapi\ContactController;
+use App\Http\Controllers\Api\Webapi\ServiceController;
 use App\Http\Controllers\AuthAdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
@@ -57,6 +58,10 @@ Route::get('/about', [ContactController::class, 'about']);
 Route::get('/pricing', [ContactController::class, 'priceing']);
 Route::get('/terms/condition', [ContactController::class, 'terms_condition']);
 Route::get('/privacy/policy', [ContactController::class, 'privacy']);
+
+// Service //
+
+Route::resource('/service', ServiceController::class);
 
 Route::get('/show-package',[PackageController::class,'showPackage']);
 // category

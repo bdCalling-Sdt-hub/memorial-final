@@ -35,7 +35,17 @@ class ServiceController extends Controller
      */
     public function store(ServiceRequest $request)
     {
+        
        $add_service = new Service();
+       $add_service->title = $request->title;
+       if($request->hasfile('image'))
+       {
+           $file = $request->file('image');
+           $extenstion = $file->getClientOriginalName();
+           $filename = time().'.'.$extenstion;
+           $file->move('uploads/services/', $filename);
+           $add_service->image = 'uploads/services/'.$filename;
+       }
        $add_service->description = $request->description;
        $add_service->save();
        if($add_service){
@@ -71,14 +81,36 @@ class ServiceController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $update_service =  Service::find($request->id);
+        $update_service = Service::find($id);
+        if (!$update_service) {
+            return response()->json(['status' => false, 'message' => 'Service not found'], 404);
+        }
+    
+        // Update title and description
+        $update_service->title = $request->title ?? $update_service->title;
         $update_service->description = $request->description ?? $update_service->description;
+    
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            // Delete the previous image if it exists
+            if ($update_service->image && file_exists(public_path($update_service->image))) {
+                unlink(public_path($update_service->image));
+            }
+    
+            // Upload the new image
+            $file = $request->file('image');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/services'), $filename);
+            $update_service->image = 'uploads/services/' . $filename;
+        }
+    
         $update_service->save();
-        if($update_service){
-         return response()->json(['status'=>'success','data'=>$update_service],200);
-         }else{
-             return response()->json(['status'=>false,'message'=>'Internal server error'],402);
-         }
+    
+        if ($update_service) {
+            return response()->json(['status' => 'success', 'data' => $update_service], 200);
+        } else {
+            return response()->json(['status' => false, 'message' => 'Internal server error'], 500);
+        }
     }
 
     /**
@@ -86,11 +118,25 @@ class ServiceController extends Controller
      */
     public function destroy(string $id)
     {
-        $service_delet = Service::where('id', $id)->delete();
-        if($service_delet){
-            return response()->json(['status'=>'success','message'=>'Service delete successfully'],200);
-        }else{
-            return response()->json(['status'=>false,'message'=>'Record not found'],402);
+          // Find the service record
+        $service = Service::find($id);
+
+        if (!$service) {
+            return response()->json(['status' => false, 'message' => 'Record not found'], 404);
+        }
+
+        // Unlink the image if it exists
+        if ($service->image && file_exists(public_path($service->image))) {
+            unlink(public_path($service->image));
+        }
+
+        // Delete the service record
+        $service_delet = $service->delete();
+
+        if ($service_delet) {
+            return response()->json(['status' => 'success', 'message' => 'Service deleted successfully'], 200);
+        } else {
+            return response()->json(['status' => false, 'message' => 'Internal server error'], 500);
         }
     }
 }

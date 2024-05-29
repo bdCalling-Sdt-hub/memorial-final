@@ -274,6 +274,7 @@ class StoryController extends Controller
                 $story->music = json_decode($story->music);
                 return $story;
             });
+
             return response()->json([
                 'message' => 'Archive Story',
                 'data' => $formatted_stories
@@ -314,7 +315,7 @@ class StoryController extends Controller
         // If the latest subscription exists and it allows story reposting
         if ($latest_subscription) {
             // Check if the user has already reposted a story
-            $reposted_story = Story::where('id',$story_id)->where('story_status',1)->where('archived', 1)->first();
+            $reposted_story = Story::where('id',$story_id)->where('archived', 1)->first();
 
             if (!empty($reposted_story)) {
                 // Proceed with reposting the story

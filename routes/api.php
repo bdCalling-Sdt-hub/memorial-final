@@ -19,10 +19,7 @@ use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RulesRegulationController;
 use App\Http\Controllers\SocialLoginController;
-//use App\Http\Controllers\StoryController;
 use App\Http\Controllers\SubscriptionController;
-use Illuminate\Http\Request;
-//use Illuminate\Support\Facades\Route;
 
 Route::group([
     ['middleware' => 'auth:api']
@@ -87,6 +84,7 @@ Route::middleware(['user','auth:api'])->group(function () {
     Route::get('/delete-story', [StoryController::class, 'deleteStory']);
     // archive story
     Route::get('/archive-story', [StoryController::class, 'archiveStory']);
+
     // Subscription
 //    Route::post('/user-subscription', [SubscriptionController::class, 'userSubscription']);
 

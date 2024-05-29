@@ -23,6 +23,8 @@ class ServiceRequest extends FormRequest
     {
         return [
             'description'=>'required',
+            'title'=>'required',
+            'image'=> 'mimes:jpeg,jpg,png,gif',
         ];
     }
 }

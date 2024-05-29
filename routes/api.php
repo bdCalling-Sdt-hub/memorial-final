@@ -18,10 +18,7 @@ use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RulesRegulationController;
 use App\Http\Controllers\SocialLoginController;
-//use App\Http\Controllers\StoryController;
 use App\Http\Controllers\SubscriptionController;
-use Illuminate\Http\Request;
-//use Illuminate\Support\Facades\Route;
 
 Route::group([
     ['middleware' => 'auth:api']

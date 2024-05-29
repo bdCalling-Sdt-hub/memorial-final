@@ -274,6 +274,7 @@ class StoryController extends Controller
                 $story->music = json_decode($story->music);
                 return $story;
             });
+
             return response()->json([
                 'message' => 'Archive Story',
                 'data' => $formatted_stories
